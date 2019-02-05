@@ -1,4 +1,4 @@
-from commands.command import Command
+from source.commands.command import Command
 
 
 class Echo(Command):

@@ -1,10 +1,10 @@
-from commands.assignment import Assignment
-from commands.cat import Cat
-from commands.echo import Echo
-from commands.exit import Exit
-from commands.external_command import ExternalCommand
-from commands.pwd import PWD
-from commands.wc import WordCount
+from source.commands.assignment import Assignment
+from source.commands.cat import Cat
+from source.commands.echo import Echo
+from source.commands.exit import Exit
+from source.commands.external_command import ExternalCommand
+from source.commands.pwd import PWD
+from source.commands.wc import WordCount
 
 
 class Interpreter(object):

@@ -1,4 +1,4 @@
-from commands.command import Command
+from source.commands.command import Command
 from subprocess import check_output
 
 import subprocess

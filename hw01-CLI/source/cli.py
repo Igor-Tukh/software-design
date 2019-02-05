@@ -1,5 +1,5 @@
-from interpreter import Interpreter
-from tokenizer import Tokenizer
+from source.interpreter import Interpreter
+from source.tokenizer import Tokenizer
 
 import os
 
