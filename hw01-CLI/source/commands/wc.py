@@ -14,7 +14,7 @@ class WordCount(Command):
                 return ' '.join(map(str,
                                     map(len,
                                         [previous_output.split(os.linesep),
-                                         previous_output.split(' '),
+                                         previous_output.replace(os.linesep, ' ').split(' '),
                                          previous_output])))
             else:
                 raise NotEnoughArgumentsError('wc: not enough arguments')
@@ -24,10 +24,10 @@ class WordCount(Command):
             try:
                 with open(arg, 'r') as current_file:
                     text = current_file.read()
-                    current = list(map(len, [text.split(os.linesep), text.split(' '), text]))
+                    current = list(map(len, [text.split(os.linesep), text.replace(os.linesep, ' ').split(' '), text]))
                     for i in range(3):
                         total[i] += current[i]
-                    result.append(' '.join(map(str, current)) + os.linesep)
+                    result.append(' '.join(map(str, current)))
             except FileNotFoundError:
                 result.append('wc: \'{filename}\': No such file'.format(filename=arg))
 
