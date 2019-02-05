@@ -44,7 +44,8 @@ def test_exit():
 
 def test_external_command():
     cmd = ExternalCommand(['ls'])
-    assert len(cmd.execute({}, '').split(os.linesep)) == 3
+    print(cmd.execute({}, ''))
+    assert 'hw01-CLI' in cmd.execute({}, '')
 
 
 def test_pwd():
