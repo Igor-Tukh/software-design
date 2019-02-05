@@ -20,6 +20,7 @@ import os
     counts number of lines, words and bytes
     Also assignments (a=4, b=$a etc) and pipes (|) are available.
 """
+
 if __name__ == '__main__':
     variables = {}
     tokenizer = Tokenizer(variables)
@@ -57,4 +58,3 @@ if __name__ == '__main__':
             print(previous_output, end='' if previous_output == '' else os.linesep)
         except Exception as e:
             print(str(e))
-
