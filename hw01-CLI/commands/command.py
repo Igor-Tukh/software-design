@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 class Command(object, metaclass=ABCMeta):
     """
     Base abstract class for all the commands.
-    New commands could be added by overriding this class and adding them into the interpreter.
+    New commands could be added by overriding this class and adding them into the Interpreter.
     """
 
     def __init__(self, args):
