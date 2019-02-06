@@ -4,8 +4,8 @@
 
 Запуск:
 ```
-<change directory to hw01-CLI>
-python3 source/cli.py
+<change directory to source in hw01-CLI>
+python3 cli.py
 ```
 
 В данной домашней работе можно выделить несколько модулей:
