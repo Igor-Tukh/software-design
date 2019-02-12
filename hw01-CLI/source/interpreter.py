@@ -3,6 +3,7 @@ from source.commands.cat import Cat
 from source.commands.echo import Echo
 from source.commands.exit import Exit
 from source.commands.external_command import ExternalCommand
+from source.commands.grep import Grep
 from source.commands.pwd import PWD
 from source.commands.wc import WordCount
 
@@ -25,7 +26,8 @@ class Interpreter(object):
                                  'exit': Exit,
                                  'pwd': PWD,
                                  'echo': Echo,
-                                 '=': Assignment}
+                                 '=': Assignment,
+                                 'grep': Grep}
 
     def refresh(self):
         """
