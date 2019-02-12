@@ -80,3 +80,6 @@ def test_grep():
     with pytest.raises(GrepArgumentParseException):
         cmd = Grep(['1', os.path.join(os.getcwd(), 'hw01-CLI', 'tests', 'resources', '3.txt'), '-w', '-i', '-A 1'])
         cmd.execute({}, '')
+    with pytest.raises(GrepArgumentParseException):
+        cmd = Grep([])
+        cmd.execute({}, '')
