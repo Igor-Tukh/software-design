@@ -71,31 +71,31 @@ def test_ls_no_arguments():
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     cmd = Ls([])
     os.chdir("./resources")
-    expected = "2.txt\n1.txt"
-    assert cmd.execute({}, None) == expected
+    possible_results = ["2.txt\n1.txt", "1.txt\n2.txt"]
+    assert cmd.execute({}, None) in possible_results
 
 
 def test_ls_with_argument():
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     cmd = Ls(['./resources'])
-    expected = "2.txt\n1.txt"
-    assert cmd.execute({}, None) == expected
+    possible_results = ["2.txt\n1.txt", "1.txt\n2.txt"]
+    assert cmd.execute({}, None) in possible_results
 
 
 def test_ls_ignores_pipe():
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     cmd = Ls([])
     os.chdir("./resources")
-    expected = "2.txt\n1.txt"
-    assert cmd.execute({}, "../") == expected
+    possible_results = ["2.txt\n1.txt", "1.txt\n2.txt"]
+    assert cmd.execute({}, "../") in possible_results
 
 
 def test_ls_with_argument_not_change_current_dir():
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     cmd = Ls(['./resources'])
-    expected = "2.txt\n1.txt"
+    possible_results = ["2.txt\n1.txt", "1.txt\n2.txt"]
     current_dir_before = os.getcwd()
-    assert cmd.execute({}, None) == expected
+    assert cmd.execute({}, None) in possible_results
     assert os.getcwd() == current_dir_before
 
 
