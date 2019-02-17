@@ -1,10 +1,11 @@
 import os
 import sys
 
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 from source.interpreter import Interpreter
 from source.tokenizer import Tokenizer
 
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 """
     Runner. Runs CLI.
