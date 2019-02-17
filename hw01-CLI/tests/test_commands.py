@@ -1,5 +1,8 @@
+import pathlib
+
 from source.commands.assignment import Assignment
 from source.commands.cat import Cat
+from source.commands.cd import Cd
 from source.commands.echo import Echo
 
 import os
@@ -8,6 +11,7 @@ from source.commands.exit import Exit
 from source.commands.external_command import ExternalCommand
 from source.commands.pwd import PWD
 from source.commands.wc import WordCount
+from source.commands.ls import Ls
 
 
 def test_assignments():
@@ -61,6 +65,65 @@ def test_wc():
     print(cmd.execute({}, ''))
     assert cmd.execute({}, '') == '1 1 1{s}2 2 3{s}wc: \'{path}\': No such file{s}3 3 4'.format(s=os.linesep,
                                                                                                 path=path)
+
+
+def test_ls_no_arguments():
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    cmd = Ls([])
+    os.chdir("./resources")
+    expected = "2.txt\n1.txt"
+    assert cmd.execute({}, None) == expected
+
+
+def test_ls_with_argument():
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    cmd = Ls(['./resources'])
+    expected = "2.txt\n1.txt"
+    assert cmd.execute({}, None) == expected
+
+
+def test_ls_ignores_pipe():
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    cmd = Ls([])
+    os.chdir("./resources")
+    expected = "2.txt\n1.txt"
+    assert cmd.execute({}, "../") == expected
+
+
+def test_ls_with_argument_not_change_current_dir():
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    cmd = Ls(['./resources'])
+    expected = "2.txt\n1.txt"
+    current_dir_before = os.getcwd()
+    assert cmd.execute({}, None) == expected
+    assert os.getcwd() == current_dir_before
+
+
+def test_cd_no_arguments():
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    cmd = Cd([])
+    expected = ""
+    expected_new_dir = os.path.expanduser('~')
+    assert cmd.execute({}, None) == expected
+    assert os.getcwd() == expected_new_dir
+
+
+def test_cd_with_argument():
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    cmd = Cd(['./resources'])
+    expected = ""
+    expected_new_dir = os.path.join(os.getcwd(), 'resources')
+    assert cmd.execute({}, None) == expected
+    assert os.getcwd() == expected_new_dir
+
+
+def test_cd_ignores_pipe():
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    cmd = Cd(['./resources'])
+    expected = ""
+    expected_new_dir = os.getcwd()
+    assert cmd.execute({}, "../") == expected
+    assert os.getcwd() == expected_new_dir
 
 
 if __name__ == '__main__':
