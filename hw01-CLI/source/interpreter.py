@@ -72,7 +72,7 @@ class Interpreter(object):
         if self.last_command in self.command_builders:
             self.commands.append(self.command_builders[self.last_command](self.args))
         else:
-            self.commands.append(ExternalCommand([self.last_command] + self.commands))
+            self.commands.append(ExternalCommand([self.last_command] + self.args))
         self.last_command = None
         self.args = []
         self.pipe_acceptable = False

@@ -14,20 +14,22 @@ class Tokenizer(object):
             self.double_quotes = False
 
         def update(self, character):
-            if character not in ['\'', '\"']:
-                return
-            if character == '\'':
-                if not self.double_quotes:
-                    self.single_quotes ^= 1
-            else:
-                if not self.single_quotes:
-                    self.double_quotes ^= 1
+            if character in ['\'', '\"']:
+                if character == '\'':
+                    if not self.double_quotes:
+                        self.single_quotes ^= 1
+                        return True
+                else:
+                    if not self.single_quotes:
+                        self.double_quotes ^= 1
+                        return True
+            return False
 
         def in_quotes(self):
             return self.single_quotes or self.double_quotes
 
         def substitute_variable(self):
-            return self.double_quotes or not self.in_quotes()
+            return not self.single_quotes
 
     def __init__(self, variables):
         self.quotes_state = self.QuotesInfo()
@@ -54,8 +56,11 @@ class Tokenizer(object):
         current_ind = 0
         while current_ind < len(line):
             if line[current_ind] in ['\'', '\"']:
-                self.quotes_state.update(line[current_ind])
+                if not self.quotes_state.update(line[current_ind]):
+                    self.last_token += line[current_ind]
                 current_ind += 1
+            elif not self.quotes_state.in_quotes() and line[current_ind] == '|':
+                current_ind = self._process_pipe(current_ind)
             elif line[current_ind] == ' ':
                 current_ind = self._process_space(line, current_ind)
             elif line[current_ind] == '$':
@@ -82,11 +87,20 @@ class Tokenizer(object):
 
         return position
 
+    def _process_pipe(self, position):
+        if self.last_token != '':
+            self.tokens.append(self.last_token)
+            self.last_token = ''
+        self.tokens.append('|')
+        position += 1
+
+        return position
+
     def _process_dollar(self, line, position):
         if self.quotes_state.substitute_variable():
             start_index = position + 1
             position += 1
-            while position < len(line) and line[position] != ' ':
+            while position < len(line) and line[position] != ' ' and line[position] != '$':
                 position += 1
             name = line[start_index:position]
             if name in self.variables:
@@ -95,6 +109,7 @@ class Tokenizer(object):
                 raise UnknownVariableError('name \'{name}\' is not defined'.format(name=name))
         else:
             self.last_token += '$'
+            position += 1
 
         return position
 

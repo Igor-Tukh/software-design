@@ -1,6 +1,7 @@
 from source.commands.command import Command
 
 import os
+import sys
 
 
 class Cat(Command):
@@ -17,8 +18,8 @@ class Cat(Command):
         result = []
         for arg in self.args:
             try:
-                with open(arg, 'r') as current_file:
-                    result.append(current_file.read())
+                with open(arg, 'rb') as current_file:
+                    result.append(current_file.read().decode(sys.stdout.encoding))
             except FileNotFoundError:
-                result.append('cat: \'{name}\': No such file or directory'.format(name=arg))
+                raise FileNotFoundError('cat: \'{name}\': No such file or directory'.format(name=arg))
         return os.linesep.join(result)

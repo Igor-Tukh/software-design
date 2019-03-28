@@ -10,5 +10,5 @@ class Exit(Command):
         if previous_output is not None:
             self.args += [previous_output]
         if len(self.args) > 0:
-            return 1  # just not None
+            return ''
         return None

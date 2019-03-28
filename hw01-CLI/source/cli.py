@@ -1,9 +1,9 @@
 import os
 import sys
+
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
-from source.interpreter import Interpreter
-from source.tokenizer import Tokenizer
+from source.input_handler import InputHandler
 
 """
     Runner. Runs CLI.
@@ -24,39 +24,8 @@ from source.tokenizer import Tokenizer
 """
 
 if __name__ == '__main__':
-    variables = {}
-    tokenizer = Tokenizer(variables)
-    interpreter = Interpreter(variables)
-
-    print('CLI')
+    handler = InputHandler()
 
     while True:
-        try:
-            commands = None
-            begin = True
-            interpreter.refresh()
-            tokenizer.refresh()
-            while commands is None:
-                if begin:
-                    begin = False
-                    print('>>', end='')
-                print('>', end=' ')
-                input_line = input()
-                tokenizer.tokenize(input_line)
-                tokens = tokenizer.get_tokens()
-                while tokens is None:
-                    print('>', end=' ')
-                    input_line = input()
-                    tokenizer.tokenize(input_line)
-                    tokens = tokenizer.get_tokens()
-                tokenizer.refresh()
-                interpreter.interpret(tokens)
-                commands = interpreter.get_commands()
-            previous_output = None
-            for command in commands:
-                previous_output = command.execute(variables, previous_output)
-                if previous_output is None:
-                    exit(0)
-            print(previous_output, end='' if previous_output == '' else os.linesep)
-        except Exception as e:
-            print(str(e))
+        input_line = input()
+        handler.process_input(input_line)
