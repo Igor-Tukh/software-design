@@ -43,7 +43,7 @@ class Grep(Command):
         elif len(others) > 2:
             raise GrepArgumentParseException('grep: too much arguments')
 
-        text = others[-1].split(os.linesep) if from_text else Grep._read_file_or_throw(others[-1])
+        text = others[-1].split('\n') if from_text else Grep._read_file_or_throw(others[-1])
         pattern = r'\b{p}\b'.format(p=others[0]) if args.w else others[0]
         result_re = re.compile(pattern, 0 if not args.i else re.IGNORECASE)
         N = args.A if args.A is not None else 0
@@ -57,7 +57,7 @@ class Grep(Command):
     def _read_file_or_throw(filename):
         try:
             with open(filename, 'r') as reading_file:
-                return [line.replace(os.linesep, '') for line in reading_file.readlines()]
+                return [line.replace(os.linesep, '').replace('\n', '') for line in reading_file.readlines()]
         except FileNotFoundError:
             raise GrepArgumentParseException('grep: {name}: No such file or directory'.format(name=filename))
 
