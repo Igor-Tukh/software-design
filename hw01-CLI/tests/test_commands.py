@@ -3,9 +3,11 @@ from source.commands.cat import Cat
 from source.commands.echo import Echo
 
 import os
+import pytest
 
 from source.commands.exit import Exit
 from source.commands.external_command import ExternalCommand
+from source.commands.grep import Grep, GrepArgumentParseException
 from source.commands.pwd import PWD
 from source.commands.wc import WordCount
 
@@ -63,6 +65,24 @@ def test_wc():
                                                                                                 path=path)
 
 
-if __name__ == '__main__':
-    test_exit()
-    test_external_command()
+def test_grep():
+    cmd = Grep(['aba', '-i'])
+    line = 'Aba{s}Caba{s}Daba{s}CabA'.format(s=os.linesep)
+    assert cmd.execute({}, line) == line
+    cmd = Grep(['aba', '-w', '-i'])
+    assert cmd.execute({}, line) == 'Aba'
+    cmd = Grep(['aba', '-w'])
+    assert cmd.execute({}, line) == ''
+    cmd = Grep(['aba', '-w', '-i', '-A 1'])
+    assert cmd.execute({}, line) == 'Aba{s}Caba'.format(s=os.linesep)
+    cmd = Grep(['1', os.path.join(os.getcwd(), 'hw01-CLI', 'tests', 'resources', '2.txt'), '-w', '-i', '-A 1'])
+    assert cmd.execute({}, '') == '1{s}2'.format(s=os.linesep)
+    with pytest.raises(GrepArgumentParseException):
+        cmd = Grep(['1', os.path.join(os.getcwd(), 'hw01-CLI', 'tests', 'resources', '2.txt'), '-w', '-i', '-A -10'])
+        assert cmd.execute({}, '') == '1{s}2'.format(s=os.linesep)
+    with pytest.raises(GrepArgumentParseException):
+        cmd = Grep(['1', os.path.join(os.getcwd(), 'hw01-CLI', 'tests', 'resources', '3.txt'), '-w', '-i', '-A 1'])
+        cmd.execute({}, '')
+    with pytest.raises(GrepArgumentParseException):
+        cmd = Grep([])
+        cmd.execute({}, '')
