@@ -43,7 +43,7 @@ class Grep(Command):
         elif len(others) > 2:
             raise GrepArgumentParseException('grep: too much arguments')
 
-        text = others[-1].split('\n') if from_text else Grep._read_file_or_throw(others[-1])
+        text = others[-1].replace(os.linesep, '\n').split('\n') if from_text else Grep._read_file_or_throw(others[-1])
         pattern = r'\b{p}\b'.format(p=others[0]) if args.w else others[0]
         result_re = re.compile(pattern, 0 if not args.i else re.IGNORECASE)
         N = args.A if args.A is not None else 0
