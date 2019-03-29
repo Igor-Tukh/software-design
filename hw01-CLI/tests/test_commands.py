@@ -2,7 +2,7 @@ from source.commands.assignment import Assignment
 from source.commands.cat import Cat
 from source.commands.echo import Echo
 from source.commands.exit import Exit
-from source.commands.external_command import ExternalCommand
+from source.commands.external_command import ExternalCommand, ExternalCommandException
 from source.commands.pwd import PWD
 from source.commands.wc import WordCount
 
@@ -49,8 +49,10 @@ def test_external_command():
         cmd = ExternalCommand(['dir'])
     else:
         cmd = ExternalCommand(['ls'])
-    print(cmd.execute({}, ''))
-    assert 'hw01-CLI' in cmd.execute({}, '')
+    try:
+        print(cmd.execute({}, ''))
+    except ExternalCommandException as e:
+        pytest.fail('Unexpected error: {}'.format(e))
 
 
 def test_pwd():
@@ -68,3 +70,7 @@ def test_wc():
     cmd = WordCount([first_path, second_path])
     assert cmd.execute({}, '') == '0 1 1{s}1 2 3{s}1 3 4'.format(s=os.linesep,
                                                                  path=third_path)
+
+
+if __name__ == '__main__':
+    test_external_command()

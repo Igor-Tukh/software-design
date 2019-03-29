@@ -1,7 +1,7 @@
 from source.commands.command import Command
-from subprocess import check_output
 
 import subprocess
+import sys
 
 
 class ExternalCommand(Command):
@@ -10,5 +10,27 @@ class ExternalCommand(Command):
     """
 
     def execute(self, variables_environment, previous_output):
-        result = check_output(self.args, stderr=subprocess.STDOUT).decode("utf-8")
-        return '' if result is None else result
+        try:
+            if previous_output is None or previous_output == '':
+                result = subprocess.run(self.args,
+                                        stderr=subprocess.PIPE,
+                                        stdout=subprocess.PIPE,
+                                        check=True)
+            else:
+                result = subprocess.run(self.args,
+                                        stderr=subprocess.PIPE,
+                                        stdout=subprocess.PIPE,
+                                        stdin=previous_output,
+                                        check=True)
+            return result.stdout.decode(sys.stdout.encoding)
+        except subprocess.CalledProcessError as e:
+            raise ExternalCommandException(e.stderr.decode(sys.stderr.encoding))
+        except FileNotFoundError:
+            raise ExternalCommandException('{}: command not found'.format(self.args[0]))
+
+
+class ExternalCommandException(Exception):
+    """
+    Error shell class
+    """
+    pass

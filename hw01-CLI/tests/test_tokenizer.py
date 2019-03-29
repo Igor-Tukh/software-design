@@ -36,3 +36,7 @@ def test_several_lines_tokenize():
     assert get_tokens_many_lines(['echo a |', 'wc']) == ['echo', 'a', '|', 'wc']
     assert get_tokens_many_lines(['a=3 \'', 'a\'']) == ['a=3', '{s}a'.format(s=os.linesep)]
     assert get_tokens_many_lines(['a=3 \"', 'a\"']) == ['a=3', '{s}a'.format(s=os.linesep)]
+
+
+if __name__ == '__main__':
+    test_several_lines_tokenize()

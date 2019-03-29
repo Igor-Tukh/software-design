@@ -1,3 +1,6 @@
+import os
+
+
 class Tokenizer(object):
     """
     Class which consistently splits lines into tokens and stores intermediate data such as quotes info, variables
@@ -52,7 +55,6 @@ class Tokenizer(object):
         :param line: line to tokenize
         :return: nothing
         """
-
         current_ind = 0
         while current_ind < len(line):
             if line[current_ind] in ['\'', '\"']:
@@ -70,7 +72,7 @@ class Tokenizer(object):
                 current_ind += 1
 
         if self.quotes_state.in_quotes():
-            self.last_token += '\n'
+            self.last_token += os.linesep
         elif self.last_token != '':
             self.tokens.append(self.last_token)
             self.last_token = ''
@@ -100,7 +102,7 @@ class Tokenizer(object):
         if self.quotes_state.substitute_variable():
             start_index = position + 1
             position += 1
-            while position < len(line) and line[position] != ' ' and line[position] != '$':
+            while position < len(line) and line[position] not in [' ', '$', '\"', '\''] != ' ':
                 position += 1
             name = line[start_index:position]
             if name in self.variables:
