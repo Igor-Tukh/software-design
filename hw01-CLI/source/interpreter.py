@@ -1,8 +1,10 @@
 from source.commands.assignment import Assignment
 from source.commands.cat import Cat
+from source.commands.cd import Cd
 from source.commands.echo import Echo
 from source.commands.exit import Exit
 from source.commands.external_command import ExternalCommand
+from source.commands.ls import Ls
 from source.commands.pwd import PWD
 from source.commands.wc import WordCount
 
@@ -25,6 +27,8 @@ class Interpreter(object):
                                  'exit': Exit,
                                  'pwd': PWD,
                                  'echo': Echo,
+                                 'ls': Ls,
+                                 'cd': Cd,
                                  '=': Assignment}
 
     def refresh(self):

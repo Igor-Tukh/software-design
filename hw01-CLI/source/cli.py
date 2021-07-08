@@ -5,6 +5,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from source.input_handler import InputHandler
 
+
 """
     Runner. Runs CLI.
     Available commands: 
